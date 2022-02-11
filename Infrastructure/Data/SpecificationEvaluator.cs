@@ -21,6 +21,22 @@ namespace Infrastructure.Data
                 {
                     query = query.Where(spec.Criteria);  //p => p.ProductTypeId == Id
                 }
+
+                if (spec.OrderBy != null)
+                {
+                    query = query.OrderBy(spec.OrderBy);  
+                }
+
+                if (spec.OrderByDescending != null)
+                {
+                    query = query.OrderByDescending(spec.OrderByDescending); 
+                }
+
+                //paging should come after query and sorting.
+                if (spec.IsPagingEnabled)
+                {
+                    query = query.Skip(spec.Skip).Take(spec.Take);
+                }
             /* The next line is basically doing the following (just the include statements):
                 return await _context.Products
                 .Include(p => p.ProductType)
